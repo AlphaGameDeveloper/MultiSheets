@@ -1,15 +1,17 @@
 import os
-import time
 import random
 import webbrowser
 import tkinter as tk
 import tkinter.messagebox
-from tkinter import ttk
+import math
 global start_dir
 def mkdir(path):
     if os.path.isdir(path) == False:
         os.mkdir(path)
 #√
+
+VERSION = "1.0"
+
 def GitHub():
     webbrowser.open_new_tab('https://github.com/DamienBoi82/MultiSheets/')
 start_dir = 'MultiSheets'
@@ -20,39 +22,156 @@ mkdir(start_dir + '/Multiplication')
 mkdir(start_dir + '/Division')
 mkdir(start_dir + '/SquareRoot')
 try:
-    global mathType
-    global minimumNumber
-    global maximumNumber
-    global numberOfProblems
-    global problemsPerLine
+    screen = tk.Tk()
+    global sheetName; sheetName=tk.StringVar()
+    global mathType; mathType=tk.StringVar()
+    global minimumNumber; minimumNumber=tk.IntVar()
+    global maximumNumber; maximumNumber=tk.IntVar()
+    global numberOfProblems; numberOfProblems=tk.IntVar()
+    global problemsPerLine; problemsPerLine=tk.IntVar()
+    def DefaultValues():
+        if mathType.get() == "Addition":
+            minimumNumber.set(0)
+            maximumNumber.set(32768)
+            numberOfProblems.set(50)
+            problemsPerLine.set(5)
+        if mathType.get() == "Subtraction":
+            minimumNumber.set(0)
+            maximumNumber.set(32768)
+            numberOfProblems.set(50)
+            problemsPerLine.set(5)
+        if mathType.get() == "Multiplication":
+            minimumNumber.set(0)
+            maximumNumber.set(12)
+            numberOfProblems.set(50)
+            problemsPerLine.set(5)
+        if mathType.get() == "Division":
+            minimumNumber.set(0)
+            maximumNumber.set(100)
+            numberOfProblems.set(50)
+            problemsPerLine.set(5)
+        if mathType.get() == "Square Root":
+            minimumNumber.set(0)
+            maximumNumber.set(144)
+            numberOfProblems.set(50)
+            problemsPerLine.set(5)
     def makeSheet():
-        log('Making math sheet with options.')
-        loadScrn = tk.Tk()
-        tk.Label(loadScrn, text='Creating math sheet...')
-        progBar = ttk.Progressbar(loadScrn, mode='determinate').grid()
-        if mathType.get() == 'Addition':
-            mkdir(start_dir + '/Addition/'+str(sheetName.get()))
-            with open(start_dir + '/Addition/'+str(sheetName.get())+'/student.txt', 'w') as student:
-                with open(start_dir + '/Addition/' + str(sheetName.get()) + '/teacher.txt', 'w') as teacher:
-                    curProblems = 0
-                    while curProblems <= int(numberOfProblems.get()) * int(problemsPerLine.get()):
-                        for problem in range(int(problemsPerLine.get())):
-                            num1 = random.randint(int(minimumNumber.get()), int(maximumNumber.get()))
-                            num2 = random.randint(int(minimumNumber.get()), int(maximumNumber.get()))
-                            studentText = str(num1) + ' + '+str(num2) + ' = _____'
-                            student.write(studentText + ' ' * int(20 - len(studentText)))
-                            teacher.write(str(num1) + ' + ' + str(num2) + ' = ' + str(num1 * num2)+ '          ')
-                            progBar['value'] += 100 / int(numberOfProblems.get())
+        if sheetName.get() == '':
+            tkinter.messagebox.showerror('MultiSheets', 'The field containing the sheet name is empty.\nPlease fill it.\nThe program will now close.\n\n(FileNotFoundError)')
+            exit(1)
 
+        if mathType.get() == "Addition":
+            mkdir(start_dir + '/Addition/' + sheetName.get())
+            with open(start_dir + '/Addition/' + sheetName.get()+'/student.txt', 'w') as student:
+                with open(start_dir + '/Addition/' + sheetName.get() + '/teacher.txt', 'w') as teacher:
+                    curProblems = 0
+                    while curProblems <= numberOfProblems.get():
+                        for problem in range(problemsPerLine.get()):
+                            num1 = random.randint(minimumNumber.get(), maximumNumber.get())
+                            num2 = random.randint(minimumNumber.get(), maximumNumber.get())
+
+                            studentText = str(num1) + " + " + str(num2) + " = ____  |  "
+                            teacherText = str(num1) + " + " + str(num2) + ' = ' + str(num1 + num2) + "  |  "
+
+                            student.write(studentText)
+                            teacher.write(teacherText)
+
+                            curProblems += 1
+
+                        student.write('\n')
+                        teacher.write('\n')
+                    tkinter.messagebox.showinfo('MultiSheets', 'Finished creating math sheet.')
+        if mathType.get() == "Subtraction":
+            mkdir(start_dir + '/Subtraction/' + sheetName.get())
+            with open(start_dir + '/Subtraction/' + sheetName.get()+'/student.txt', 'w') as student:
+                with open(start_dir + '/Subtraction/' + sheetName.get() + '/teacher.txt', 'w') as teacher:
+                    curProblems = 0
+                    while curProblems <= numberOfProblems.get():
+                        for problem in range(problemsPerLine.get()):
+                            num1 = random.randint(minimumNumber.get(), maximumNumber.get())
+                            num2 = random.randint(minimumNumber.get(), maximumNumber.get())
+
+                            studentText = str(num1) + " - " + str(num2) + " = ____  |  "
+                            teacherText = str(num1) + " - " + str(num2) + ' = ' + str(num1 - num2) + "  |  "
+
+                            student.write(studentText)
+                            teacher.write(teacherText)
+
+                            curProblems += 1
+
+                        student.write('\n')
+                        teacher.write('\n')
+                    tkinter.messagebox.showinfo('MultiSheets', 'Finished creating math sheet.')
+        if mathType.get() == "Multiplication":
+            mkdir(start_dir + '/Multiplication/' + sheetName.get())
+            with open(start_dir + '/Multiplication/' + sheetName.get()+'/student.txt', 'w') as student:
+                with open(start_dir + '/Multiplication/' + sheetName.get() + '/teacher.txt', 'w') as teacher:
+                    curProblems = 0
+                    while curProblems <= numberOfProblems.get():
+                        for problem in range(problemsPerLine.get()):
+                            num1 = random.randint(minimumNumber.get(), maximumNumber.get())
+                            num2 = random.randint(minimumNumber.get(), maximumNumber.get())
+
+                            studentText = str(num1) + " x " + str(num2) + " = ____  |  "
+                            teacherText = str(num1) + " x " + str(num2) + ' = ' + str(num1 * num2) + "  |  "
+
+                            student.write(studentText)
+                            teacher.write(teacherText)
+
+                            curProblems += 1
+
+                        student.write('\n')
+                        teacher.write('\n')
+                    tkinter.messagebox.showinfo('MultiSheets', 'Finished creating math sheet.')
+        if mathType.get() == "Division":
+            mkdir(start_dir + '/Division/' + sheetName.get())
+            with open(start_dir + '/Division/' + sheetName.get()+'/student.txt', 'w') as student:
+                with open(start_dir + '/Division/' + sheetName.get() + '/teacher.txt', 'w') as teacher:
+                    curProblems = 0
+                    while curProblems <= numberOfProblems.get():
+                        for problem in range(problemsPerLine.get()):
+                            num1 = random.randint(minimumNumber.get(), maximumNumber.get())
+                            num2 = random.randint(minimumNumber.get(), maximumNumber.get())
+
+                            studentText = str(num1) + " ÷ " + str(num2) + " = ____  |  "
+                            teacherText = str(num1) + " ÷ " + str(num2) + ' = ' + str(num1 / num2) + "  |  "
+
+                            student.write(studentText)
+                            teacher.write(teacherText)
+
+                            curProblems += 1
+
+                        student.write('\n')
+                        teacher.write('\n')
+                    tkinter.messagebox.showinfo('MultiSheets', 'Finished creating math sheet.')
+        if mathType.get() == "Square Root":
+            mkdir(start_dir + '/SquareRoot/' + sheetName.get())
+            with open(start_dir + '/SquareRoot/' + sheetName.get()+'/student.txt', 'w') as student:
+                with open(start_dir + '/SquareRoot/' + sheetName.get() + '/teacher.txt', 'w') as teacher:
+                    curProblems = 0
+                    while curProblems <= numberOfProblems.get():
+                        for problem in range(problemsPerLine.get()):
+                            num = random.randint(minimumNumber.get(), maximumNumber.get())
+
+                            studentText = "Square Root of: "+str(num) + " = ____  |  "
+                            teacherText = "Square root of: "+str(num) + " = " + str(math.sqrt(num)) + "  |  "
+
+                            student.write(studentText)
+                            teacher.write(teacherText)
+
+                            curProblems += 1
+
+                        student.write('\n')
+                        teacher.write('\n')
+                    tkinter.messagebox.showinfo('MultiSheets', 'Finished creating math sheet.')
     def log(text):
         print('[DEBUG]: '+str(text))
     #Setup GUI
-    screen = tk.Tk()
-    screen.geometry('550x550+300+300')
+    screen.geometry('550x700+300+300')
     screen.title('MultiSheets, By Damien')
     screen.grid()
     font = ('Times 24')
-    tk.Label(screen, text="MultiSheets,\nBy Damien B.\n\nSet math type: (Click me)", font=font).grid()
+    tk.Label(screen, text="MultiSheets,\nBy Damien B.\n\nVersion: "+VERSION+"\n\nSet math type: (Click me)", font=font).grid()
     options = [
         'Addition',
         'Subtraction',
@@ -62,21 +181,16 @@ try:
     ]
     mathType = tk.StringVar()
     drop = tk.OptionMenu(screen, mathType, *options).grid()
-    sheetName = tk.StringVar()
+    tk.Button(screen, text='Use default values for math type', command=DefaultValues).grid()
     tk.Label(screen, text='Enter math sheet name:', font=font).grid()
     tk.Entry(screen, textvariable = sheetName).grid()
-    minimumNumber = tk.StringVar()
     tk.Label(screen, text='Enter minimum number:', font=font).grid()
-    minimumNumber = tk.StringVar()
     tk.Entry(screen, textvariable = minimumNumber).grid()
     tk.Label(screen, text='Enter maximum number:', font=font).grid()
-    maximumNumber = tk.StringVar()
     tk.Entry(screen, textvariable = maximumNumber).grid()
     tk.Label(screen, text='Enter number of lines of problems:', font=font).grid()
-    numberOfProblems = tk.StringVar()
     tk.Entry(screen, textvariable = numberOfProblems).grid()
     tk.Label(screen, text='Enter problems per line:', font=font).grid()
-    problemsPerLine = tk.StringVar()
     tk.Entry(screen, textvariable = problemsPerLine).grid()
     tk.Button(screen, text='Start', command=makeSheet).grid()
     tk.Button(screen, text='View Source Code', command=GitHub).grid()
